@@ -105,7 +105,8 @@ Contains the HTML code and the Game class.
 			if ($new[$num] == '-') {
 				$new[$num] = 'o';
 			} else {
-				$this->pick_move($new);
+				unset($num);
+				return $this->pick_move($new);
 			}
 			return $new;
 		}

@@ -98,8 +98,7 @@ Contains the HTML code and the Game class.
 		}
 		
 		// function to select the computer's move
-		// there is a glitch in this function
-		// 		if a cell is used, it would not pick another cell
+		// crash due to memory. error in line 109
 		function pick_move($new) {
 			$num = rand(0,8);
 			if ($new[$num] == '-') {

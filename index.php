@@ -18,7 +18,6 @@ and open the template in the editor.
 				$squares = $_GET['board'];
 			}
 			$game = new Game($squares);
-			//$game->pick_move();
 			$game->display();
 			if ($game->winner('x')) {
 				echo 'You win. Lucky guesses!';
@@ -78,30 +77,30 @@ and open the template in the editor.
 		function show_cell($which) {
 			$token = $this->position[$which];
 			$new = $this->position;
-			// deal with the easy case
-			if ($token <> '­-') {
-				// now the hard case
-				//$this­->newposition = $this­->position; // copy the original
-				//$this­->newposition[$which] = 'x'; // this would be their move
-				//$move = implode($this­->newposition); // make a string from the board array
-				$url = $_SERVER['PHP_SELF'];
-				$new[$which] = 'x';
-				$query = implode($this->pick_move($new));
-				$link = $url . '?board=' . $query; // this is what we want the link to be
-				// so return a cell containing an anchor and showing a hyphen
-				return '<td><a href="'.$link.'">'.$token.'</a></td>';
-				//return '<td>'.$token.'</td>';
+			$url = $_SERVER['PHP_SELF'];
+			$new[$which] = 'x';
+			$spot = rand(0,8);
+			$query = implode($this->pick_move($new, $spot));
+			$link = $url . '?board=' . $query; // this is what we want the link to be
+			// so return a cell containing an anchor and showing a hyphen
+			$cell = '<td><a href="'.$link.'">'.$token.'</a></td>';
+			if ($token != '-') {
+				$cell = '<td>'.$token.'</td>';
 			}
+			return $cell;
 		}
 		
-		function pick_move($new) {
-			$num = rand(0,8);
-			if (($new[$num] == '-') || ($new[$num] != 'x')) {
-				$new[$num] = 'o';
+		function pick_move($new, $spot) {
+			if ($new[$spot] != '-') {
+				$num = rand(0,8);
+				if ($new[$num] == '-') {
+					$new[$num] = 'o';
+				}
+				return $new;
 			} else {
-				$this->pick_move($new);
+				$new[$spot] = 'o';
+				return $new;
 			}
-			return $new;
 		}
 	}
 ?>

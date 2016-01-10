@@ -4,3 +4,6 @@ Emilio Wu
 A00768079
 
 This is not 100% working. Crash due to the recursive pick_move() function.
+
+GitHub link:
+https://github.com/emiliowu/ACIT4850_lab1.git

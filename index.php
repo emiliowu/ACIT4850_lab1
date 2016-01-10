@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+index.php
+Play an interactive game of Tic-Tac-Toe with a computer.
+Contains the HTML code and the Game class.
 -->
 <html>
     <head>
@@ -11,14 +11,16 @@ and open the template in the editor.
     </head>
     <body>
 		<?php
-			// put your code here
+			// Get the query
 			if (!isset($_GET['board'])) {
 				$squares = '---------';
 			} else {
 				$squares = $_GET['board'];
 			}
+			// create the Game object
 			$game = new Game($squares);
 			$game->display();
+			// determine winner
 			if ($game->winner('x')) {
 				echo 'You win. Lucky guesses!';
 			} else if ($game->winner('o')) {
@@ -31,13 +33,16 @@ and open the template in the editor.
 </html>
 
 <?php
+	// Game class
 	class Game {
 		var $position;
-
+		
+		// Game class constructor
 		function __construct($squares) {
 			$this->position = str_split($squares);
 		}
 
+		// function to determine the winner
 		function winner($token) {
 			$won = false;
 			$result = false;
@@ -62,6 +67,8 @@ and open the template in the editor.
 			return $won;
 		}
 		
+		// function to display the game board onto the screen
+		// requires the show_cell() function
 		function display() {
 			echo 'Welcome to Jarvis, the evil Tic-Tac-Toe Game.';
 			echo '<table style="font-size:500%; font-weight:bold;">';
@@ -74,13 +81,13 @@ and open the template in the editor.
 			echo '</table>';
 		}
 		
+		// function used in the display() function
 		function show_cell($which) {
 			$token = $this->position[$which];
 			$new = $this->position;
 			$url = $_SERVER['PHP_SELF'];
 			$new[$which] = 'x';
-			$spot = rand(0,8);
-			$query = implode($this->pick_move($new, $spot));
+			$query = implode($this->pick_move($new));
 			$link = $url . '?board=' . $query; // this is what we want the link to be
 			// so return a cell containing an anchor and showing a hyphen
 			$cell = '<td><a href="'.$link.'">'.$token.'</a></td>';
@@ -90,17 +97,17 @@ and open the template in the editor.
 			return $cell;
 		}
 		
-		function pick_move($new, $spot) {
-			if ($new[$spot] != '-') {
-				$num = rand(0,8);
-				if ($new[$num] == '-') {
-					$new[$num] = 'o';
-				}
-				return $new;
+		// function to select the computer's move
+		// there is a glitch in this function
+		// 		if a cell is used, it would not pick another cell
+		function pick_move($new) {
+			$num = rand(0,8);
+			if ($new[$num] == '-') {
+				$new[$num] = 'o';
 			} else {
-				$new[$spot] = 'o';
-				return $new;
+				$this->pick_move($new);
 			}
+			return $new;
 		}
 	}
 ?>
